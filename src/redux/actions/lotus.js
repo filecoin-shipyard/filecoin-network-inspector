@@ -4,6 +4,35 @@ import { getClient } from "../../utils/lotus";
 import IpfsHttpClient from "ipfs-http-client";
 const client = getClient();
 
+const dealStateNames = [
+  // go-fil-markets/storagemarket/types.go
+  "Unknown", // 0
+  "ProposalNotFound", // 1
+  "ProposalRejected", // 2
+  "ProposalAccepted", // 3
+  "Staged", // 4
+  "Sealing", // 5
+  "Active", // 6
+  "Failing", // 7
+  "NotFound", // 8
+  // Internal
+  "FundsEnsured", // 9 Deposited funds as neccesary to create a deal, ready to move forward
+  "WaitingForDataRequest", // 10 Client is waiting for a request for the deal data
+  "Validating", // 11 Verifying that deal parameters are good
+  "AcceptWait", // 12 Deciding whether or not to accept the deal
+  "Transferring", // 13 Moving data
+  "WaitingForData", // 14 Manual transfer
+  "VerifyData", // 15 Verify transferred data - generate CAR / piece data
+  "EnsureProviderFunds", // 16 Ensuring that provider collateral is sufficient
+  "EnsureClientFunds", // 17 Ensuring that client funds are sufficient
+  "ProviderFunding", // 18 Waiting for funds to appear in Provider balance
+  "ClientFunding", // 19 Waiting for funds to appear in Client balance
+  "Publish", // 20 Publishing deal to chain
+  "Publishing", // 21 Waiting for deal to appear on chain
+  "Error", // 22 deal failed with an unexpected error
+  "Completed", // 23 on provider side, indicates deal is active and info for retrieval is recorded
+];
+
 export const getChainStats = (payload) => async (dispatch) => {
   client.chainNotify((changes) => {
     dispatch({
@@ -36,10 +65,11 @@ export const uploadToFilecoin = (payload) => async (dispatch) => {
     protocol: "https",
     apiPath: `/api/0/ipfs/api/v0`,
   });
-  console.log(payload.fileBuffer);
+
   for await (const result of ipfs.add(payload.fileBuffer)) {
     // Creating a Storage Deal with a Miner
     console.log("Sending Deal");
+    console.log(result);
     const dataRef = {
       Data: {
         TransferType: "graphsync",
@@ -54,15 +84,41 @@ export const uploadToFilecoin = (payload) => async (dispatch) => {
       EpochPrice: payload.epochPrice,
       MinBlocksDuration: 300,
     };
-    console.log(dataRef);
     const deal = await nodeClient.clientStartDeal(dataRef);
-    console.log(deal);
+    document.getElementById("uploadToFilecoin").innerText =
+      "Upload to Filecoin Network";
+    dispatch({
+      type: types.ADD_DATA_TO_FILECOIN,
+      payload: {
+        id: deal["/"],
+        cid: result.path,
+      },
+    });
   }
 };
 export const getClientDeals = (payload) => async (dispatch) => {
   const nodeClient = getClient({ nodeNumber: 0, nodeOrMiner: "node" });
-  const clientDeals = await nodeClient.clientListDeals();
+  let clientDeals = await nodeClient.clientListDeals();
   console.log(clientDeals);
+  clientDeals = clientDeals.map((deal) => {
+    let color;
+    switch (deal.State) {
+      case 6:
+        color = "green";
+        break;
+      case 22:
+        color = "red";
+        break;
+      default:
+        color = "grey";
+        break;
+    }
+    return { ...deal, stateName: dealStateNames[deal.State], color: color };
+  });
+  dispatch({
+    type: types.GET_CLIENT_DEALS,
+    payload: clientDeals.sort(dynamicsort("DealID")),
+  });
 };
 
 export const getStorageDealStatus = (payload) => async (dispatch) => {
@@ -116,3 +172,22 @@ export const getMinerAddress = (payload) => async (dispatch) => {
     payload: address,
   });
 };
+
+function dynamicsort(property, order) {
+  var sort_order = 1;
+  if (order === "desc") {
+    sort_order = -1;
+  }
+  return function (a, b) {
+    // a should come before b in the sorted order
+    if (a[property] < b[property]) {
+      return -1 * sort_order;
+      // a should come after b in the sorted order
+    } else if (a[property] > b[property]) {
+      return 1 * sort_order;
+      // a and b are the same
+    } else {
+      return 0 * sort_order;
+    }
+  };
+}

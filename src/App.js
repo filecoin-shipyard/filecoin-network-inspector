@@ -5,14 +5,18 @@ import Store from "./redux/store";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Chain from "./pages/Chain";
 import Miners from "./pages/Miners";
-import StorageMarket from "./pages/StorageMarket";
-import RetrievalMarket from "./pages/RetrievalMarket";
+import Miner from "./pages/Miner";
+import Market from "./pages/Market";
+import Deals from "./pages/Deals";
+import Deal from "./pages/Deal";
+import NavBar from "./components/NavBar";
 
 function App() {
   return (
     <center>
       <Provider store={Store}>
         <Router>
+          <NavBar />
           <Switch>
             <Route path="/chain">
               <Chain />
@@ -20,11 +24,20 @@ function App() {
             <Route path="/miners">
               <Miners />
             </Route>
-            <Route path="/storage-market">
-              <StorageMarket />
+            <Route path="/miner/:id?">
+              <Miner />
             </Route>
-            <Route path="/retrieval-market">
-              <RetrievalMarket />
+            <Route path="/market">
+              <Market />
+            </Route>
+            <Route path="/deals">
+              <Deals />
+            </Route>
+            <Route path="/deal/:id?">
+              <Deal />
+            </Route>
+            <Route path="/">
+              <Chain />
             </Route>
           </Switch>
         </Router>

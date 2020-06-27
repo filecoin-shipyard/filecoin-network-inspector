@@ -3,6 +3,8 @@ import types from "../constants";
 const initialState = {
   chain: [],
   miner: {},
+  market: [],
+  deals: null,
   chainHead: null,
   wallet: null,
   minerAddress: null,
@@ -36,6 +38,16 @@ export default (state = initialState, action) => {
       return {
         ...state,
         wallet: action.payload,
+      };
+    case types.GET_CLIENT_DEALS:
+      return {
+        ...state,
+        deals: action.payload,
+      };
+    case types.ADD_DATA_TO_FILECOIN:
+      return {
+        ...state,
+        market: [...state.market, action.payload],
       };
     default:
       return state;
