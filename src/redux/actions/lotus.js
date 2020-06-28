@@ -58,13 +58,13 @@ export const getWalletDetails = (payload) => async (dispatch) => {
 export const uploadToFilecoin = (payload) => async (dispatch) => {
   // Adding file to IPFS
   const nodeClient = getClient({ nodeNumber: 0, nodeOrMiner: "node" });
-  //const ipfs = IpfsHttpClient("http://localhost:5001");
-  const ipfs = IpfsHttpClient({
-    host: "lotus.testground.ipfs.team",
-    port: 443,
-    protocol: "https",
-    apiPath: `/api/0/ipfs/api/v0`,
-  });
+  const ipfs = IpfsHttpClient("http://localhost:5001");
+  // const ipfs = IpfsHttpClient({
+  //   host: "lotus.testground.ipfs.team",
+  //   port: 443,
+  //   protocol: "https",
+  //   apiPath: `/api/0/ipfs/api/v0`,
+  // });
 
   for await (const result of ipfs.add(payload.fileBuffer)) {
     // Creating a Storage Deal with a Miner
@@ -84,7 +84,9 @@ export const uploadToFilecoin = (payload) => async (dispatch) => {
       EpochPrice: payload.epochPrice,
       MinBlocksDuration: 300,
     };
+    console.log("XXXX");
     const deal = await nodeClient.clientStartDeal(dataRef);
+    console.log("YYYY");
     document.getElementById("uploadToFilecoin").innerText =
       "Upload to Filecoin Network";
     dispatch({
