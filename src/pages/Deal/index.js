@@ -1,6 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import { getClientDeals } from "../../redux/actions/lotus";
+import {
+  getClientDeals,
+  getDataFromFilecoinNetwork,
+} from "../../redux/actions/lotus";
 import FilecoinGIF from "../../assets/filecoin.gif";
 import ReactJson from "react-json-view";
 import { Link } from "react-router-dom";
@@ -64,6 +67,10 @@ function Deal(props) {
       ) : (
         <img src={FilecoinGIF} />
       )}
+      <br />
+      <br />
+      <br />
+      <br />
     </div>
   );
 }

@@ -45,6 +45,8 @@ function StorageMarket(props) {
   return (
     <Fragment>
       <h1>StorageMarket</h1>
+      <br />
+      <br />
       <h3>Your Balance</h3>
       {/* <button onClick={getWalletDetails}>Refresh Balance</button> */}
       {wallet ? (
@@ -138,6 +140,20 @@ function StorageMarket(props) {
                     </p>
                   </div>
                   <ReactJson src={deal} collapsed={true} name="Deal Details" />
+                  <br />
+                  <br />
+                  {deal.stateName === "Active" ? (
+                    <button
+                      className="btn btn-primary mb-2"
+                      onClick={() => {
+                        getDataFromFilecoinNetwork({
+                          cid: proposalCidToCID[deal.ProposalCid["/"]],
+                        });
+                      }}
+                    >
+                      Get Data from Filecoin
+                    </button>
+                  ) : null}
                 </div>
               </div>
             );
@@ -172,6 +188,10 @@ function StorageMarket(props) {
       >
         Fetch Data
       </button> */}
+      <br />
+      <br />
+      <br />
+      <br />
     </Fragment>
   );
 }
