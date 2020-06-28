@@ -1,29 +1,15 @@
 import { LotusRPC } from "@filecoin-shipyard/lotus-client-rpc";
-//import { NodejsProvider } from "@filecoin-shipyard/lotus-client-provider-nodejs";
 import { BrowserProvider } from "@filecoin-shipyard/lotus-client-provider-browser";
 import { testnet } from "@filecoin-shipyard/lotus-client-schema";
 
-export const getClient = (options = {}) => {
-  // const url = "http://localhost:7777/rpc/v0";
-  // const url = 'wss://lotus.testground.ipfs.team/api/0/node/rpc/v0'
-  // const provider = new NodejsProvider(url, { transport: 'http' })
-  // const provider = new NodejsProvider(url);
-  let wsUrl, tokenUrl;
-  if (Object.keys(options).length === 0) {
-    options.nodeOrMiner = "node";
-    options.nodeNumber = 0;
-  }
-  wsUrl =
-    "ws://localhost:7777" +
-    `/${options.nodeNumber}/${options.nodeOrMiner}/rpc/v0`;
+export const getClient = (options = { nodeOrMiner: "node", nodeNumber: 0 }) => {
+  // API endpoint for local Lotus devnet
+  const API = "ws://localhost:7777";
 
-  tokenUrl =
-    "http://" +
-    "ws://localhost:7777" +
-    `/${options.nodeNumber}/testplan/` +
-    (options.nodeOrMiner === "node" ? ".lotus" : ".lotusstorage") +
-    "/token";
+  // Websocket endpoint for local Lotus devnet
+  const wsUrl = API + `/${options.nodeNumber}/${options.nodeOrMiner}/rpc/v0`;
 
+  // Creating and returning a Lotus client that can be used anywhere in the app
   const provider = new BrowserProvider(wsUrl);
   return new LotusRPC(provider, {
     schema:

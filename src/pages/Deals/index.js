@@ -14,47 +14,56 @@ function Deals(props) {
     <div style={{ margin: "18px" }}>
       <h1>Deals</h1>
       {deals ? (
-        deals.map((deal, index) => (
-          <div className="card" style={{ width: "48rem" }}>
-            <div className="card-body">
-              <h5 className="card-title">DealID: {deal.DealID}</h5>
-              <h6 className="card-subtitle mb-2 text-muted">
-                Status: <font color={deal.color}>{deal.stateName}</font>
-              </h6>
-              <div className="card-text">
-                {deal.Message.length !== 0 ? (
+        deals.length > 0 ? (
+          deals.map((deal, index) => (
+            <div className="card" style={{ width: "48rem" }}>
+              <div className="card-body">
+                <h5 className="card-title">DealID: {deal.DealID}</h5>
+                <h6 className="card-subtitle mb-2 text-muted">
+                  Status: <font color={deal.color}>{deal.stateName}</font>
+                </h6>
+                <div className="card-text">
+                  {deal.Message.length !== 0 ? (
+                    <p>
+                      <font color="red">
+                        <b>Error: {deal.Message}</b>
+                      </font>
+                    </p>
+                  ) : null}
+                  {/* <p><b>CID: </b><a href={} target="_blank">{deal.Provider}</a></p> */}
                   <p>
-                    <font color="red">
-                      <b>Error: {deal.Message}</b>
-                    </font>
+                    <b>Piece CID: </b>
+                    {deal.PieceCID["/"]}
                   </p>
-                ) : null}
-                {/* <p><b>CID: </b><a href={} target="_blank">{deal.Provider}</a></p> */}
-                <p>
-                  <b>Piece CID: </b>
-                  {deal.PieceCID["/"]}
-                </p>
-                <p>
-                  <b>Duration: </b>
-                  {deal.Duration}
-                </p>
-                <p>
-                  <b>Price Per Epoch: </b>
-                  {deal.PricePerEpoch}
-                </p>
-                <p>
-                  <b>Provider: </b>
-                  <Link to={`/miner/${deal.Provider}`}>{deal.Provider}</Link>
-                </p>
-                <p>
-                  <b>File Size: </b>
-                  {deal.Size}
-                </p>
+                  <p>
+                    <b>Duration: </b>
+                    {deal.Duration}
+                  </p>
+                  <p>
+                    <b>Price Per Epoch: </b>
+                    {deal.PricePerEpoch}
+                  </p>
+                  <p>
+                    <b>Provider: </b>
+                    <Link to={`/miner/${deal.Provider}`}>{deal.Provider}</Link>
+                  </p>
+                  <p>
+                    <b>File Size: </b>
+                    {deal.Size}
+                  </p>
+                </div>
+                <ReactJson src={deal} collapsed={true} name="Deal Details" />
               </div>
-              <ReactJson src={deal} collapsed={true} name="Deal Details" />
             </div>
-          </div>
-        ))
+          ))
+        ) : (
+          <p>
+            <h6>
+              No recent deals! <Link to="/market">Try adding a file</Link> to
+              Filecoin!
+            </h6>
+          </p>
+        )
       ) : (
         <img src={FilecoinGIF} />
       )}
