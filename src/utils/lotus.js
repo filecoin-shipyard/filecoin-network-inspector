@@ -10,23 +10,12 @@ export const getClient = (options = {}) => {
   // const provider = new NodejsProvider(url);
   let wsUrl, tokenUrl;
   if (Object.keys(options).length === 0) {
-    // wsUrl = "ws://localhost:7777/rpc/v0";
     options.nodeOrMiner = "node";
     options.nodeNumber = 0;
   }
-  wsUrl = "ws://localhost:7777" + `/rpc/v0`;
-  // wsUrl =
-  //   "ws://localhost:7777" +
-  //   `/${options.nodeNumber}/${options.nodeOrMiner}/rpc/v0`;
-  // wsUrl =
-  //   "wss://lotus.testground.ipfs.team/api" +
-  //   `/${options.nodeNumber}/${options.nodeOrMiner}/rpc/v0`;
-  // tokenUrl =
-  //   "https://" +
-  //   "lotus.testground.ipfs.team/api" +
-  //   `/${options.nodeNumber}/testplan/` +
-  //   (options.nodeOrMiner === "node" ? ".lotus" : ".lotusstorage") +
-  //   "/token";
+  wsUrl =
+    "ws://localhost:7777" +
+    `/${options.nodeNumber}/${options.nodeOrMiner}/rpc/v0`;
 
   tokenUrl =
     "http://" +
@@ -35,14 +24,7 @@ export const getClient = (options = {}) => {
     (options.nodeOrMiner === "node" ? ".lotus" : ".lotusstorage") +
     "/token";
 
-  const provider = new BrowserProvider(
-    wsUrl /* , {
-    token: async () => {
-      const response = await fetch(tokenUrl);
-      return await response.text();
-    },
-  } */
-  );
+  const provider = new BrowserProvider(wsUrl);
   return new LotusRPC(provider, {
     schema:
       options.nodeOrMiner === "node" ? testnet.fullNode : testnet.storageMiner,
