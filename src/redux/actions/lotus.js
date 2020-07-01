@@ -33,7 +33,7 @@ const dealStateNames = [
   "Completed", // 23 on provider side, indicates deal is active and info for retrieval is recorded
 ];
 
-export const getChainStats = (payload) => async (dispatch) => {
+export const getChainStats = () => async (dispatch) => {
   client.chainNotify((changes) => {
     dispatch({
       type: types.GET_CHAIN_STATS,
@@ -41,7 +41,8 @@ export const getChainStats = (payload) => async (dispatch) => {
     });
   });
 };
-export const getWalletDetails = (payload) => async (dispatch) => {
+
+export const getWalletDetails = () => async (dispatch) => {
   const nodeClient = getClient({ nodeNumber: 0, nodeOrMiner: "node" });
   const defaultWalletAddress = await nodeClient.walletDefaultAddress();
   const balance = await nodeClient.walletBalance(defaultWalletAddress);
@@ -61,8 +62,6 @@ export const uploadToFilecoin = (payload) => async (dispatch) => {
 
   for await (const result of ipfs.add(payload.fileBuffer)) {
     // Creating a Storage Deal with a Miner
-    console.log("Sending Deal");
-    console.log(result);
     const dataRef = {
       Data: {
         TransferType: "graphsync",
@@ -77,11 +76,12 @@ export const uploadToFilecoin = (payload) => async (dispatch) => {
       EpochPrice: payload.epochPrice,
       MinBlocksDuration: 300,
     };
-    console.log("XXXX");
+
     const deal = await nodeClient.clientStartDeal(dataRef);
-    console.log("YYYY");
+
     document.getElementById("uploadToFilecoin").innerText =
       "Upload to Filecoin Network";
+
     dispatch({
       type: types.ADD_DATA_TO_FILECOIN,
       payload: {
@@ -91,10 +91,9 @@ export const uploadToFilecoin = (payload) => async (dispatch) => {
     });
   }
 };
-export const getClientDeals = (payload) => async (dispatch) => {
+export const getClientDeals = () => async (dispatch) => {
   const nodeClient = getClient({ nodeNumber: 0, nodeOrMiner: "node" });
   let clientDeals = await nodeClient.clientListDeals();
-  console.log(clientDeals);
   clientDeals = clientDeals.map((deal) => {
     let color;
     switch (deal.State) {
@@ -130,13 +129,52 @@ export const getAllStorageDealsStatus = (payload) => async (dispatch) => {
 
 export const getDataFromFilecoinNetwork = (payload) => async (dispatch) => {
   const nodeClient = getClient({ nodeNumber: 0, nodeOrMiner: "node" });
+  window.nodeClient = nodeClient;
+
+  // Check if the cid is available locally on the node or not
   const hasLocal = await nodeClient.clientHasLocal({ "/": payload.cid });
   console.log({ hasLocal });
+
+  // Fetch the retrieval offer from the lotus node
   const offers = await nodeClient.clientFindData({ "/": payload.cid });
   console.log({ offers });
+
+  const retrievalOffer = {
+    Root: offers[0].Root,
+    Size: offers[0].Size,
+    Total: offers[0].MinPrice,
+    PaymentInterval: offers[0].PaymentInterval,
+    PaymentIntervalIncrease: offers[0].PaymentIntervalIncrease,
+    Client: payload.walletAddress,
+    Miner: offers[0].Miner,
+    MinerPeerID: offers[0].MinerPeerID,
+  };
+
+  // const ask = await nodeClient.clientQueryAsk(
+  //   "12D3KooWGzxzKZYveHXtpG6AsrUJBcWxHBFS2HsEoGTxrMLvKXtf",
+  //   "t01234"
+  // );
+
+  const randomId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+
+  console.log({ retrievalOffer });
+  const fileRef = {
+    Path: `/home/vasa/Desktop/filecoin/lotus/${payload.cid}-${randomId}.txt`,
+    IsCAR: false,
+  };
+  console.log("clientRetrieve", retrievalOffer, fileRef);
+  const result = await nodeClient.clientRetrieve(retrievalOffer, fileRef);
+
+  console.log("Retrieve result", result);
+  console.log({
+    url:
+      `http://localhost:7777/` +
+      `0/testplan/downloads/` +
+      `${payload.cid}-${randomId}.txt`,
+  });
 };
 
-export const stateListMiners = (payload) => async (dispatch) => {
+export const stateListMiners = () => async (dispatch) => {
   let result = await client.stateListMiners([]);
   result = result.map(async (miner) => {
     let minerPow = await client.stateMinerPower(miner, []);
@@ -150,7 +188,7 @@ export const stateListMiners = (payload) => async (dispatch) => {
   });
 };
 
-export const getChainHead = (payload) => async (dispatch) => {
+export const getChainHead = () => async (dispatch) => {
   const chainHead = await client.chainHead();
   dispatch({
     type: types.GET_CHAIN_HEAD,
@@ -158,12 +196,11 @@ export const getChainHead = (payload) => async (dispatch) => {
   });
 };
 
-export const getMinerAddress = (payload) => async (dispatch) => {
+export const getMinerAddress = () => async (dispatch) => {
   const minerClient = getClient({ nodeNumber: 0, nodeOrMiner: "miner" });
-  console.log(minerClient);
   const address = await minerClient.actorAddress();
   dispatch({
-    type: types.GET_CHAIN_HEAD,
+    type: types.GET_MINER_ADDRESS,
     payload: address,
   });
 };

@@ -1,15 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
-import { getChainStats, getChainHead } from "../../redux/actions/lotus";
+import { getChainStats } from "../../redux/actions/lotus";
 import { Link } from "react-router-dom";
 import FilecoinGIF from "../../assets/filecoin.gif";
 import ReactJson from "react-json-view";
 
 function Chain(props) {
-  const { chain, chainHead, getChainHead, getChainStats } = props;
+  const { chain, getChainStats } = props;
   if (chain.length === 0) {
     getChainStats();
-    getChainHead();
   }
   return (
     <div style={{ margin: "18px" }}>
@@ -56,12 +55,10 @@ function Chain(props) {
 
 const mapStateToProps = (state) => ({
   chain: state.app.chain,
-  chainHead: state.app.chainHead,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getChainStats: () => dispatch(getChainStats()),
-  getChainHead: () => dispatch(getChainHead()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chain);

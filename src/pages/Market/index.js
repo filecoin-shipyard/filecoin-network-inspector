@@ -142,18 +142,22 @@ function StorageMarket(props) {
                   <ReactJson src={deal} collapsed={true} name="Deal Details" />
                   <br />
                   <br />
-                  {deal.stateName === "Active" ? (
+                  {/* {deal.stateName === "Active" ? (
                     <button
                       className="btn btn-primary mb-2"
                       onClick={() => {
+                        console.log({
+                          cid: proposalCidToCID[deal.ProposalCid["/"]],
+                        });
                         getDataFromFilecoinNetwork({
                           cid: proposalCidToCID[deal.ProposalCid["/"]],
+                          walletAddress: wallet.address,
                         });
                       }}
                     >
                       Get Data from Filecoin
                     </button>
-                  ) : null}
+                  ) : null} */}
                 </div>
               </div>
             );
