@@ -1,4 +1,4 @@
-## Meme Marketplace Tutorial
+## Filecoin Network Inspector Sample Application
 
 - [Overview](#overview)
 - [App Architecture Overview](#app-architecture-overview)
@@ -7,24 +7,13 @@
 
 ### Overview
 
-In this tutorial, we will build a filecoin network inspector using a local Lotus devnet and IPFS daemon.
+This tutorial shows how to build a Filecoin network inspector using lotus via a fork of Textile’s lotus-devnet, the Lotus JS API client, and go-ipfs.
 
-Using this filecoin network inspector, you can interact with any filecoin network. Our app will include:
-
-- A simple blockchain explorer, showing information about filecoin blocks.
-- A miner explorer, showing information about all the active miners in the connected filecoin network.
-- A marketplace, where you can add your files on the connected filecoin network and see how storage and retrieval deals occur under the hood.
+The Filecoin network inspector interacts with several aspects of the Filecoin network that are exposed through Lotus’ JS API. The sample app in this tutorial will include:
+- A simple chain explorer, showing information about Filecoin blocks.
+- A miner explorer, showing information about all the active miners in the Filecoin network (in this example, this shows the miners in the local devnet).
+- A marketplace, where you can add your files on the connected Filecoin network and see how storage and retrieval deals occur under the hood.
 - A deals page, where you can see all your previous deals and their details.
-
-After completing this tutorial, you will be able to:
-
-- Setup your own local filecoin network.
-- Connect to the running filecoin network using different javascript based libraries.
-- Use the javascript libraries to query the endpoints for chain and miner data.
-- Use the javascript libraries to create storage and retrieval deals.
-- Use the javascript libraries to fetch details about your previous deals.
-
-Here is a sneak-peek of how the final application will look:
 
 **Chain**
 
@@ -44,12 +33,10 @@ Here is a sneak-peek of how the final application will look:
 
 ### App Architecture Overview
 
-If you are just looking for the code, head here.
-
-Below is the 10,000 feet overview of how our application will work:
-
-1. A docker script runs a Lotus (filecoin client), and an IPFS node is run using a daemon.
-2. A React dashbaord showing different features of the filecoin network inspector that uses different javascript libraries to interact with the lotus node and the IPFS node.
+A high-level overview of our application architecture:
+- Docker script to run a lotus node (Filecoin client) and local-devnet to mock interactions on a live network, like [testnet]() or [mainnet]().
+- Active go-ipfs daemon (IPFS client) to generate data CIDs and import to store on Filecoin.
+- React dashboard shows different features of the Filecoin network inspector. The dashboard uses various JavaScript libraries to interact with the lotus node and the go-ipfs node.
 
 ![App Architecture Overview](./assets/app-arch.png)
 
