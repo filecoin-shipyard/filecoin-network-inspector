@@ -42,7 +42,7 @@ A high-level overview of our application architecture:
 
 ### How to run
 
-Follow [this tutorial]() on Filecoin docs to get started.
+Follow [this tutorial](https://docs.filecoin.io/build/examples/network-inspector/overview/) on Filecoin docs to get started.
 
 ### License
 
