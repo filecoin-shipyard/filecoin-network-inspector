@@ -142,13 +142,13 @@ function StorageMarket(props) {
                   <ReactJson src={deal} collapsed={true} name="Deal Details" />
                   <br />
                   <br />
-                  {/* {deal.stateName === "Active" ? (
+                  {deal.stateName === "Active" ? (
                     <button
                       className="btn btn-primary mb-2"
+                      id="fetchData"
                       onClick={() => {
-                        console.log({
-                          cid: proposalCidToCID[deal.ProposalCid["/"]],
-                        });
+                        document.getElementById("fetchData").innerText =
+                          "Creating retrieval deal...";
                         getDataFromFilecoinNetwork({
                           cid: proposalCidToCID[deal.ProposalCid["/"]],
                           walletAddress: wallet.address,
@@ -157,7 +157,7 @@ function StorageMarket(props) {
                     >
                       Get Data from Filecoin
                     </button>
-                  ) : null} */}
+                  ) : null}
                 </div>
               </div>
             );
@@ -169,29 +169,6 @@ function StorageMarket(props) {
           sweet-sweet deals :)
         </p>
       )}
-      {/*      <h3>Get Deal Info</h3>
-      <button onClick={getClientDeals}>Get Deals List</button>
-      <h3>Get Deal Info</h3>
-      <input type="text" id="cid_deal" />
-      <button
-        onClick={() => {
-          const cid = document.getElementById("cid_deal").value;
-          getStorageDealStatus({ cid: cid });
-        }}
-      >
-        <h3>Get All Deals</h3>
-      </button>
-
-      <h3>Fetch Data back from Filecoin Network</h3>
-      <input type="text" id="cid" />
-      <button
-        onClick={() => {
-          const cid = document.getElementById("cid").value;
-          getDataFromFilecoinNetwork({ cid: cid });
-        }}
-      >
-        Fetch Data
-      </button> */}
       <br />
       <br />
       <br />

@@ -16,7 +16,7 @@ function Deals(props) {
       {deals ? (
         deals.length > 0 ? (
           deals.map((deal, index) => (
-            <div className="card" style={{ width: "48rem" }}>
+            <div key={index} className="card" style={{ width: "48rem" }}>
               <div className="card-body">
                 <h5 className="card-title">DealID: {deal.DealID}</h5>
                 <h6 className="card-subtitle mb-2 text-muted">
@@ -57,12 +57,12 @@ function Deals(props) {
             </div>
           ))
         ) : (
-          <p>
+          <div>
             <h6>
               No recent deals! <Link to="/market">Try adding a file</Link> to
               Filecoin!
             </h6>
-          </p>
+          </div>
         )
       ) : (
         <img src={FilecoinGIF} />

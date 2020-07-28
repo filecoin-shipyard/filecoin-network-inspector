@@ -19,7 +19,7 @@ function Miner(props) {
         miner.minerList.map((miner, index) => {
           if (miner.name === window.location.pathname.split("/").pop()) {
             return (
-              <div className="card" style={{ width: "42rem" }}>
+              <div key={index} className="card" style={{ width: "42rem" }}>
                 <div className="card-body">
                   <h5 className="card-title">Name: {miner.name}</h5>
                   <h6 className="card-subtitle mb-2 text-muted">
