@@ -147,8 +147,8 @@ export const getDataFromFilecoinNetwork = (payload) => async () => {
     MinerPeerID: offers[0].MinerPeerID,
   };
 
-  const result = await nodeClient.clientRetrieve(retrievalOffer, null);
-  if (!result) {
+  const error = await nodeClient.clientRetrieve(retrievalOffer, null);
+  if (!error) {
     document.getElementById("fetchData").innerText =
       "Data fetched Successfully";
     window.open(`http://localhost:7070/ipfs/${payload.cid}`, "_blank");
