@@ -108,7 +108,7 @@ function StorageMarket(props) {
                     <p>
                       <b>CID: </b>
                       <a
-                        href={`https://ipfs.io/ipfs/${
+                        href={`http://localhost:8080/ipfs/${
                           proposalCidToCID[deal.ProposalCid["/"]]
                         }`}
                         target="_blank"

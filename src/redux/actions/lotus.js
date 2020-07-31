@@ -121,7 +121,7 @@ export const getStorageDealStatus = (payload) => async (dispatch) => {
   console.log({ dealInfo });
 };
 
-export const getAllStorageDealsStatus = (payload) => async (dispatch) => {
+export const getAllStorageDealsStatus = () => async () => {
   const nodeClient = getClient({ nodeNumber: 0, nodeOrMiner: "node" });
   const deals = await nodeClient.clientListDeals();
   console.log({ deals });
@@ -160,7 +160,6 @@ export const getDataFromFilecoinNetwork = (payload) => async () => {
 
 export const stateListMiners = () => async (dispatch) => {
   let result = await client.stateListMiners([]);
-  // ["t01000"]
   result = result.map(async (miner) => {
     let minerPow = await client.stateMinerPower(miner, []);
     return { name: miner, power: minerPow };
