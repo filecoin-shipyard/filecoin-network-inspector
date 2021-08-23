@@ -1,11 +1,17 @@
-## Filecoin Network Inspector Sample Application
+# Filecoin Network Inspector Sample Application
+
+## Status
+
+This repository is in a **frozen** state. It is not being maintained or kept in sync with the tools and libraries it builds on. Even though work on this repository has been **shelved**, anyone interested in updating or maintaining this project should express their interest on one Filecoin community conversation mediums: <https://github.com/filecoin-project/community#join-the-community>.
+
+---
 
 - [Overview](#overview)
 - [App Architecture Overview](#app-architecture-overview)
 - [How to run](#how-to-run)
 - [License](#license)
 
-### Overview
+## Overview
 
 This tutorial shows how to build a Filecoin network inspector using lotus via a fork of Textile’s lotus-devnet, the Lotus JS API client, and go-ipfs.
 
@@ -31,7 +37,7 @@ The Filecoin network inspector interacts with several aspects of the Filecoin ne
 
 ![Deals](./assets/deals.png)
 
-### App Architecture Overview
+## App Architecture Overview
 
 A high-level overview of our application architecture:
 - Docker script to run a lotus node (Filecoin client) and local-devnet to mock interactions on a live network, like [testnet]() or [mainnet]().
@@ -40,11 +46,11 @@ A high-level overview of our application architecture:
 
 ![App Architecture Overview](./assets/app-arch.png)
 
-### How to run
+## How to run
 
 Follow [this tutorial](https://docs.filecoin.io/build/examples/network-inspector/overview/) on Filecoin docs to get started.
 
-### License
+## License
 
 This is dual-licensed under Apache 2.0 and MIT terms:
 
